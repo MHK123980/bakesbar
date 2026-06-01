@@ -49,7 +49,9 @@ export default function Home() {
   };
 
   useEffect(() => {
+    // Fetch fresh data in the background – cached data already shows instantly
     fetchData();
+    // Poll less aggressively (30s instead of 5s) to save bandwidth on mobile
     const interval = setInterval(fetchData, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -220,7 +222,7 @@ export default function Home() {
         className="header"
       >
         <img src="/logo.jpg" alt="BakesBar Logo" className="logo float-anim" />
-        <h1>BakesBar</h1>
+        <h1>BAKESBAR</h1>
         <p style={{marginBottom: '15px'}}>Freshly Baked Delights, Straight from the Oven.</p>
         {config?.storeTiming && (
           <div className="store-timing-banner">
@@ -312,29 +314,29 @@ export default function Home() {
                           <span className="item-detail-price">Rs. {breakdown.variantLineTotal}</span>
                         </div>
                         {breakdown.addonLines.map((addon, addonIdx) => (
-                          <div key={`${addon.name}-${addonIdx}`} className="item-detail-row addon-detail-row">
-                            <div className="addon-row-left">
+                          <div key={`${addon.name}-${addonIdx}`} className="addon-detail-row">
+                            <div className="addon-name-price-row">
                               <span className="addon-text">+ {addon.name}</span>
-                              <div className="cart-addon-qty-controls">
-                                <button
-                                  type="button"
-                                  className="cart-addon-qty-btn"
-                                  onClick={() => updateCartAddonQuantity(idx, addonIdx, -1)}
-                                  disabled={addon.quantity <= 1}
-                                >
-                                  −
-                                </button>
-                                <span className="cart-addon-qty-value">{addon.quantity}</span>
-                                <button
-                                  type="button"
-                                  className="cart-addon-qty-btn"
-                                  onClick={() => updateCartAddonQuantity(idx, addonIdx, 1)}
-                                >
-                                  +
-                                </button>
-                              </div>
+                              <span className="item-detail-price">Rs. {addon.total}</span>
                             </div>
-                            <span className="item-detail-price">Rs. {addon.total}</span>
+                            <div className="cart-addon-qty-controls">
+                              <button
+                                type="button"
+                                className="cart-addon-qty-btn"
+                                onClick={() => updateCartAddonQuantity(idx, addonIdx, -1)}
+                                disabled={addon.quantity <= 1}
+                              >
+                                −
+                              </button>
+                              <span className="cart-addon-qty-value">{addon.quantity}</span>
+                              <button
+                                type="button"
+                                className="cart-addon-qty-btn"
+                                onClick={() => updateCartAddonQuantity(idx, addonIdx, 1)}
+                              >
+                                +
+                              </button>
+                            </div>
                           </div>
                         ))}
                       </div>

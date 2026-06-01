@@ -6,12 +6,6 @@
   padding: 2rem 1rem;
 }
 
-.header {
-  text-align: center;
-  margin-bottom: 2rem;
-  z-index: 10;
-}
-
 /* ===================== */
 /* Cookie Loader         */
 /* ===================== */
@@ -78,6 +72,12 @@
 @keyframes crumbBounce {
   0%, 100% { transform: translateY(0); opacity: 0.6; }
   50% { transform: translateY(-6px); opacity: 1; }
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+  z-index: 10;
 }
 
 /* ===================== */
@@ -277,6 +277,7 @@
   font-weight: 800;
   letter-spacing: 2px;
   color: var(--text-main);
+  text-transform: uppercase;
   text-shadow: 0 2px 10px rgba(255,255,255,0.8);
 }
 
@@ -552,16 +553,19 @@
 }
 
 .addon-detail-row {
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 6px;
 }
 
-.addon-row-left {
+.addon-name-price-row {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 8px;
-  flex: 1;
-  min-width: 0;
-  flex-wrap: wrap;
 }
 
 .item-detail-row .addon-text {

@@ -131,44 +131,54 @@
   font-size: 1.1rem;
 }
 
+.addon-option {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  background: rgba(245, 235, 224, 0.6);
+  border-radius: 12px;
+  border: 1px solid rgba(139, 28, 49, 0.12);
+}
+
 .addons-group .checkbox-label {
   display: flex;
   align-items: center;
   gap: 10px;
   font-weight: 600;
   cursor: pointer;
-  margin-bottom: 10px;
+  margin-bottom: 0;
 }
 
-/* ===================== */
-/* Quantity Controls     */
-/* ===================== */
-.quantity-selector {
-  margin-bottom: 25px;
+.addon-qty-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(139, 28, 49, 0.2);
 }
 
-.quantity-selector label {
-  display: block;
+.addon-qty-label {
+  font-size: 0.85rem;
   font-weight: 800;
-  margin-bottom: 8px;
-  font-size: 1.1rem;
+  color: var(--text-main);
 }
 
-.qty-controls, .addon-qty-controls {
+.addon-qty-controls {
   display: inline-flex;
   align-items: center;
-  background: #f5ebe0;
+  background: #fff;
   border-radius: 10px;
   overflow: hidden;
-  border: 1.5px solid rgba(139, 28, 49, 0.15);
+  border: 1.5px solid rgba(139, 28, 49, 0.2);
 }
 
-.qty-btn, .addon-qty-btn {
-  width: 38px;
-  height: 38px;
+.addon-qty-btn {
+  width: 36px;
+  height: 36px;
   border: none;
   background: transparent;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 800;
   color: var(--text-main);
   cursor: pointer;
@@ -176,50 +186,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
 }
 
-.qty-btn:hover, .addon-qty-btn:hover:not(:disabled) {
+.addon-qty-btn:hover {
   background: rgba(139, 28, 49, 0.1);
 }
 
-.qty-btn:disabled, .addon-qty-btn:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-.qty-value, .addon-qty-value {
-  min-width: 36px;
+.addon-qty-value {
+  min-width: 32px;
   text-align: center;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 800;
   color: var(--text-dark);
   user-select: none;
-}
-
-.addon-qty-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-left: 30px;
-  margin-bottom: 15px;
-}
-
-.addon-qty-label {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--text-dark);
-}
-
-.addon-qty-btn {
-  width: 32px;
-  height: 32px;
-  font-size: 1.1rem;
-}
-
-.addon-qty-value {
-  min-width: 28px;
-  font-size: 1rem;
 }
 
 .total-display {
@@ -239,6 +218,68 @@
   font-size: 0.8rem !important;
   color: var(--text-main) !important;
   font-weight: 600;
+}
+
+/* ===================== */
+/* Quantity Selector     */
+/* ===================== */
+.quantity-selector {
+  margin-bottom: 20px;
+}
+
+.quantity-selector label {
+  display: block;
+  font-weight: 800;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.qty-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  background: #f5ebe0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 2px solid rgba(139, 28, 49, 0.2);
+}
+
+.qty-btn {
+  width: 48px;
+  height: 48px;
+  border: none;
+  background: transparent;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qty-btn:hover {
+  background: rgba(139, 28, 49, 0.12);
+}
+
+.qty-btn:active {
+  background: rgba(139, 28, 49, 0.22);
+}
+
+.qty-value {
+  min-width: 48px;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  user-select: none;
+}
+
+.unit-price-hint {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #888;
 }
 
 /* ===================== */
@@ -594,5 +635,28 @@
   .add-to-cart-btn {
     font-size: 1rem;
     padding: 12px;
+  }
+
+  .qty-btn {
+    width: 42px;
+    height: 42px;
+    font-size: 1.2rem;
+  }
+
+  .qty-value {
+    min-width: 40px;
+    font-size: 1.1rem;
+  }
+
+  .quantity-selector {
+    margin-bottom: 16px;
+  }
+
+  .quantity-selector label {
+    font-size: 0.95rem;
+  }
+
+  .unit-price-hint {
+    font-size: 0.8rem;
   }
 }
