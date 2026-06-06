@@ -10,7 +10,14 @@ const Material = require('../models/Material');
 const Counter = require('../models/Counter');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'bakesbar_jwt_secure_secret_fallback_key';
-const storage = multer.memoryStorage();
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
 const upload = multer({ storage: storage });
 
 // Admin Login
@@ -58,9 +65,7 @@ router.post('/products', verifyAdmin, upload.array('images', 10), async (req, re
   try {
     const productData = JSON.parse(req.body.productData);
     const imagePaths = req.files.map(file => {
-      let mime = file.mimetype;
-      if (!mime || mime === 'application/octet-stream') mime = 'image/jpeg';
-      return `data:${mime};base64,${file.buffer.toString('base64')}`;
+      return `/uploads/${file.filename}`;
     });
     
     // Combine existing images (if sent, e.g. during an update fake via POST, but usually just new)
@@ -81,9 +86,7 @@ router.put('/products/:id', verifyAdmin, upload.array('images', 10), async (req,
   try {
     const productData = JSON.parse(req.body.productData);
     const newImagePaths = req.files.map(file => {
-      let mime = file.mimetype;
-      if (!mime || mime === 'application/octet-stream') mime = 'image/jpeg';
-      return `data:${mime};base64,${file.buffer.toString('base64')}`;
+      return `/uploads/${file.filename}`;
     });
     
     // We assume productData.images contains the existing images the user kept
