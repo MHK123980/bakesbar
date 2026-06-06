@@ -91,19 +91,63 @@ export default function Admin() {
     if (document.getElementById('file-input')) document.getElementById('file-input').value = '';
   };
 
-  const handleFileChange = (e) => {
+  const compressImage = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = event => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 800;
+          const MAX_HEIGHT = 800;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob(blob => {
+            const newFile = new File([blob], file.name, {
+              type: 'image/jpeg',
+              lastModified: Date.now()
+            });
+            resolve(newFile);
+          }, 'image/jpeg', 0.6);
+        };
+      };
+    });
+  };
+
+  const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
-    setNewImagesFiles(prev => [...prev, ...files]);
-    
-    files.forEach(file => {
+    e.target.value = '';
+
+    for (let file of files) {
+      const compressedFile = await compressImage(file);
+      setNewImagesFiles(prev => [...prev, compressedFile]);
+      
       const reader = new FileReader();
       reader.onload = (ev) => {
         setNewImagesPreviews(prev => [...prev, ev.target.result]);
       };
-      reader.readAsDataURL(file);
-    });
-    
-    e.target.value = '';
+      reader.readAsDataURL(compressedFile);
+    }
   };
 
   const removeExistingImage = (idx) => {
