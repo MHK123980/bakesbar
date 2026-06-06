@@ -129,11 +129,11 @@ export default function Admin() {
       fetchMaterials();
       fetchAnalytics();
 
-      // Polling for live orders and analytics every 30 seconds
+      // Polling for live orders and analytics every 5 seconds
       const interval = setInterval(() => {
         fetchOrders(true);
         fetchAnalytics(true);
-      }, 30000);
+      }, 5000);
 
       return () => clearInterval(interval);
     }
