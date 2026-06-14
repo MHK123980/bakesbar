@@ -35,6 +35,29 @@ const verifyAdmin = (req, res, next) => {
   }
 };
 
+const uploadToImgBB = async (base64Image) => {
+  const IMGBB_API_KEY = process.env.IMGBB_API_KEY;
+  if (!IMGBB_API_KEY) {
+    throw new Error('IMGBB_API_KEY is missing in .env');
+  }
+  const formData = new URLSearchParams();
+  formData.append('key', IMGBB_API_KEY);
+  formData.append('image', base64Image);
+
+  const response = await fetch('https://api.imgbb.com/1/upload', {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`ImgBB upload failed: ${errText}`);
+  }
+
+  const data = await response.json();
+  return data.data.url;
+};
+
 // --- PRODUCT ROUTES ---
 router.get('/products', async (req, res) => {
   let products = await Product.find();
@@ -57,11 +80,12 @@ router.get('/products', async (req, res) => {
 router.post('/products', verifyAdmin, upload.array('images', 10), async (req, res) => {
   try {
     const productData = JSON.parse(req.body.productData);
-    const imagePaths = req.files.map(file => {
-      let mime = file.mimetype;
-      if (!mime || mime === 'application/octet-stream') mime = 'image/jpeg';
-      return `data:${mime};base64,${file.buffer.toString('base64')}`;
-    });
+    const imagePaths = [];
+    for (const file of req.files) {
+      const base64Str = file.buffer.toString('base64');
+      const url = await uploadToImgBB(base64Str);
+      imagePaths.push(url);
+    }
     
     // Combine existing images (if sent, e.g. during an update fake via POST, but usually just new)
     const combinedImages = [...(productData.images || []), ...imagePaths];
@@ -80,11 +104,12 @@ router.post('/products', verifyAdmin, upload.array('images', 10), async (req, re
 router.put('/products/:id', verifyAdmin, upload.array('images', 10), async (req, res) => {
   try {
     const productData = JSON.parse(req.body.productData);
-    const newImagePaths = req.files.map(file => {
-      let mime = file.mimetype;
-      if (!mime || mime === 'application/octet-stream') mime = 'image/jpeg';
-      return `data:${mime};base64,${file.buffer.toString('base64')}`;
-    });
+    const newImagePaths = [];
+    for (const file of req.files) {
+      const base64Str = file.buffer.toString('base64');
+      const url = await uploadToImgBB(base64Str);
+      newImagePaths.push(url);
+    }
     
     // We assume productData.images contains the existing images the user kept
     const combinedImages = [...(productData.images || []), ...newImagePaths];
